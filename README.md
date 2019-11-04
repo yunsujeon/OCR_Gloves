@@ -1,10 +1,10 @@
 # OCR_Gloves
 
 ## What is this?
-This product is for the multiple handicapped blind like Helen Keller. It convert image to text in real time and show vibration signal based on braille.  
+This product is for the multiple handicapped blind like Helen Keller. It converts image to text in real time and vibrate motors based on braille.
 
 ## OCR
-Optical Character Recognition. It convert image to text. We apply this tech after Image process by opencv.  
+Optical Character Recognition. It converts image to text. We apply this tech after Image process by opencv.  
 ### tesseract
 [tesseract](https://github.com/tesseract-ocr/tesseract)  
 [tesseract-ocr](https://github.com/tesseract-ocr/tesseract/wiki)  
