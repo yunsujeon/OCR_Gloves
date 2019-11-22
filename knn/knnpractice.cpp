@@ -77,7 +77,7 @@ int main(int, char**)
 	char buffer[BUF_MAX];
 	struct termios newtio;
 
-/*	fd = open( "/dev/ttyUSB0", O_RDWR | O_NOCTTY ); // /dev/ttyACM0 사용하기 위>해 오픈해준다.
+	fd = open( "/dev/ttyACM0", O_RDWR | O_NOCTTY ); // /dev/ttyACM0 사용하기 위>해 오픈해준다.
 
 	if(fd<0)
 	{
@@ -98,7 +98,7 @@ int main(int, char**)
 
 	tcflush (fd, TCIFLUSH );
 	tcsetattr(fd, TCSANOW, &newtio ); //포트에 대한 통신 환경설정
-*/
+
 	//웹캡으로 부터 데이터 읽어오기 위해 준비 
 	VideoCapture cap(0);
 
@@ -118,15 +118,13 @@ int main(int, char**)
 		//웹캡으로부터 한 프레임을 읽어옴 
 		cap >> frame;
 		cap >> frame2;
-		
-		flip(frame,frame,-1);
+
+//use reflect mirror		
+/*		flip(frame,frame,-1);
 		flip(frame,frame,1);
 		flip(frame2,frame2,-1);
 		flip(frame2,frame2,1);
-		
-//		frame=frame(Range(0,100),Range(0,100));
-//		frame2=frame2(Range(0,100),Range(0,100));
-
+*/
 		//그레이 스케일로 변경하는 함수 실행
 		Mat img_result;
 		process( frame, img_result );
@@ -183,7 +181,7 @@ int main(int, char**)
 			papaindex=index;
 			Rect rect(a,b,c,d);
 			Mat subimage = frame2(rect);
-			sprintf(buf,"/home/jeon/knn/imgsaves/testimg_%06d.png",index);
+			sprintf(buf,"/home/dotheart/OCR_Gloves/knn/imgsaves/testimg_%06d.png",index);
 			cout<<buf<<endl;
 			imwrite(buf,subimage);
 			index++;
@@ -232,7 +230,7 @@ int main(int, char**)
 			kNearest->train(matTrainingImagesAsFlattenedFloats, ml::ROW_SAMPLE, matClassificationInts);
 
 
-			//Mat matTestingNumbers = imread("/home/jeon/imgsaves/testimg_%6d.png",papaindex);            // read in the test numbers image
+			//Mat matTestingNumbers = imread("/home/dotheart/OCR_Gloves/knn/imgsaves/testimg_%6d.png",papaindex);            // read in the test numbers image
 			Mat matTestingNumbers = imread(buf,IMREAD_COLOR);   // test numbers image를 읽어온다.
 
 			if (matTestingNumbers.empty())
@@ -316,11 +314,11 @@ int main(int, char**)
 			i=read(fd,buffer,BUF_MAX);
 			buffer[i]='\0';
 
-			/*
-
+			
+/*
 			ofstream fout;
 
-			sprintf(fub,"/home/jeon/knn/string_text/text_%06d.txt",papaindex);
+			sprintf(fub,"/home/dotheart/OCR_Gloves/knn/string_text/text_%06d.txt",papaindex);
 
 			fout.open(fub);		
 
@@ -339,8 +337,7 @@ int main(int, char**)
 			}
 
 			fout.close();
-		
-		*/
+*/
 
 		}
 		imshow("camera1", frame) ;
