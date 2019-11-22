@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private String host = "accs.mju.ac.kr";
     private int port = 2018;
     private String password = "rnrtk1203";
+    private boolean flag = false;
+    private String command = "./python pytes.py";
 
 //    private String username = "jeon";
 //    private String host = "192.168.0.12";
@@ -57,60 +60,93 @@ public class MainActivity extends AppCompatActivity {
         jsch = new JSch();
         button = findViewById(R.id.button);
 
-        button.setOnLongClickListener(new View.OnLongClickListener() {
+        button.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View view) {
-                AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder builder;
+                if(flag) {
+                    builder = command_dialog();
+                }else {
+                    builder = connect_dialog();
+                }
 
-                ad.setTitle("정보입력");       // 제목 설정
-                ad.setMessage("IP,포트,아이디,비밀번호를 입력해주세요");   // 내용 설정
-
-                // EditText 삽입하기
-
-                final EditText et = new EditText(MainActivity.this);
-                final EditText et1 = new EditText(MainActivity.this);
-                final EditText et2 = new EditText(MainActivity.this);
-                final EditText et3 = new EditText(MainActivity.this);
-                et1.setInputType(InputType.TYPE_CLASS_NUMBER);
-                LinearLayout lay = new LinearLayout(MainActivity.this);
-                lay.setOrientation(LinearLayout.VERTICAL);
-                lay.addView(et);
-                lay.addView(et1);
-                lay.addView(et2);
-                lay.addView(et3);
-                ad.setView(lay);
-
-                // 확인 버튼 설정
-                ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d("yes", "Yes Btn Click");
-
-                        // Text 값 받아서 로그 남기기
-                        host = et.getText().toString();
-                        port = Integer.parseInt(et1.getText().toString());
-                        username = et2.getText().toString();
-                        password = et3.getText().toString();
-
-                        dialog.dismiss();     //닫기
-                        // Event
-                    }
-                });
-                // 취소 버튼 설정
-                ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d("no","No Btn Click");
-                        dialog.dismiss();     //닫기
-                    }
-                });
-
-                // 창 띄우기
-                ad.show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
                 return false;
             }
         });
+    }
+
+    private AlertDialog.Builder command_dialog() {
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.command_layout, null);
+
+        final EditText et = v.findViewById(R.id.et_com);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("커맨드 입력");       // 제목 설정
+        builder.setMessage("커맨드를 입력해주세요");   // 내용 설정
+        builder.setView(v);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("yes", "Yes Btn Click");
+
+                // Text 값 받아서 로그 남기기
+                command = et.getText().toString();
+                dialog.dismiss();     //닫기
+                // Event
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("no","No Btn Click");
+                dialog.dismiss();     //닫기
+            }
+        });
+        return builder;
+    }
+
+    private AlertDialog.Builder connect_dialog() {
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.connect_layout, null);
+
+        final EditText et = v.findViewById(R.id.et_ip);
+        final EditText et1 = v.findViewById(R.id.et_port);
+        final EditText et2 = v.findViewById(R.id.et_name);
+        final EditText et3 = v.findViewById(R.id.et_pass);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("정보입력");       // 제목 설정
+        builder.setMessage("IP,포트,아이디,비밀번호를 입력해주세요");   // 내용 설정
+        builder.setView(v);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("yes", "Yes Btn Click");
+
+                // Text 값 받아서 로그 남기기
+                host = et.getText().toString();
+                port = Integer.parseInt(et1.getText().toString());
+                username = et2.getText().toString();
+                password = et3.getText().toString();
+
+                dialog.dismiss();     //닫기
+                // Event
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("no","No Btn Click");
+                dialog.dismiss();     //닫기
+            }
+        });
+        return builder;
     }
 
     @Override
@@ -135,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("==> Connecting to " + host);
                     try {
                         //세션에 접속하기위한 사전준비
+
                         session = jsch.getSession(username, host, port);
                         session.setPassword(password);
 
@@ -151,20 +188,38 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("channel","==> Connected to " + host);
 
                         InputStream in = channelExec.getInputStream();
-                        //해당 메시지(cat ./asdf/text.txt) 를 채널로 보냄
-                        channelExec.setCommand("echo GOOD");
-                        channelExec.connect();
+                        //커맨드라인에 보낼 메시지.
 
+                        if(flag){
+                            channelExec.setCommand(command);
+                            channelExec.connect();
+                        }else{
+                            channelExec.setCommand("echo GOOD");
+                            channelExec.connect();
+                        }
 
                         Log.d("channelExec","==> Connected to " + host);
 
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                         String line;
                         textView.setText("");
-
                         while ((line = reader.readLine()) != null)
                         {
-                            textView.append(line + "\n");
+                            if(flag){
+                                textView.append(line + "\n");
+                            }else{
+                                if(line.equals("GOOD")) {
+                                    flag = true;
+                                    button.setText("SEND COMMAND");
+
+                                    textView.setText("connect complete");
+                                }else{
+                                    textView.setText("connect fail");
+                                }
+                            }
+                        }
+                        if(flag && textView.getText() == ""){
+                            textView.setText("return message is null OR\n send wrong message");
                         }
 
                     } catch (JSchException e) {
