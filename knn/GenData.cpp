@@ -42,7 +42,7 @@ int main() {
         'U', 'V', 'W', 'X', 'Y', 'Z',
 		'a', 'b', 'c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
-    imgTrainingNumbers = cv::imread("spec2.PNG");          // read in training numbers image
+    imgTrainingNumbers = cv::imread("/home/jeon/OCR_Gloves/knn/spec2.PNG");          // read in training numbers image
 
     if (imgTrainingNumbers.empty()) {                               // if unable to open image
         std::cout << "error: image not read from file\n\n";         // show error message on command line

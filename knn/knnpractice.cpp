@@ -77,7 +77,7 @@ int main(int, char**)
 	char buffer[BUF_MAX];
 	struct termios newtio;
 
-	fd = open( "/dev/ttyACM0", O_RDWR | O_NOCTTY ); // /dev/ttyACM0 사용하기 위>해 오픈해준다.
+	fd = open( "/dev/ttyUSB0", O_RDWR | O_NOCTTY ); // /dev/ttyACM0 사용하기 위>해 오픈해준다.
 
 	if(fd<0)
 	{
@@ -100,7 +100,7 @@ int main(int, char**)
 	tcsetattr(fd, TCSANOW, &newtio ); //포트에 대한 통신 환경설정
 
 	//웹캡으로 부터 데이터 읽어오기 위해 준비 
-	VideoCapture cap(0);
+	VideoCapture cap(1);
 
 	if (!cap.isOpened())
 	{
@@ -181,7 +181,7 @@ int main(int, char**)
 			papaindex=index;
 			Rect rect(a,b,c,d);
 			Mat subimage = frame2(rect);
-			sprintf(buf,"/home/dotheart/OCR_Gloves/knn/imgsaves/testimg_%06d.png",index);
+			sprintf(buf,"/home/jeon/OCR_Gloves/knn/imgsaves/testimg_%06d.png",index);
 			cout<<buf<<endl;
 			imwrite(buf,subimage);
 			index++;
