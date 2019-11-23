@@ -11,6 +11,7 @@
         android:layout_width="339dp"
         android:layout_height="308dp"
         android:layout_marginTop="32dp"
+        android:background="@drawable/btn_shape"
         android:longClickable="true"
         android:onClick="click"
         android:text="Connect"

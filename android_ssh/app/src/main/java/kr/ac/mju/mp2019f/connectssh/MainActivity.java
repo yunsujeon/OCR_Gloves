@@ -1,5 +1,6 @@
 package kr.ac.mju.mp2019f.connectssh;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         jsch = new JSch();
         button = findViewById(R.id.button);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.abs_layout);
+
         button.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View view) {
@@ -115,13 +119,12 @@ public class MainActivity extends AppCompatActivity {
         View v = inflater.inflate(R.layout.connect_layout, null);
 
         final EditText et = v.findViewById(R.id.et_ip);
-        final EditText et1 = v.findViewById(R.id.et_port);
         final EditText et2 = v.findViewById(R.id.et_name);
         final EditText et3 = v.findViewById(R.id.et_pass);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("정보입력");       // 제목 설정
-        builder.setMessage("IP,포트,아이디,비밀번호를 입력해주세요");   // 내용 설정
+        builder.setMessage("IP,아이디,비밀번호를 입력해주세요");   // 내용 설정
         builder.setView(v);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Text 값 받아서 로그 남기기
                 host = et.getText().toString();
-                port = Integer.parseInt(et1.getText().toString());
+                port = 22;
                 username = et2.getText().toString();
                 password = et3.getText().toString();
 
@@ -213,8 +216,6 @@ public class MainActivity extends AppCompatActivity {
                                     button.setText("SEND COMMAND");
 
                                     textView.setText("connect complete");
-                                }else{
-                                    textView.setText("connect fail");
                                 }
                             }
                         }
@@ -225,10 +226,12 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSchException e) {
                         e.printStackTrace();
                         Log.d("error1",e.toString());
+                        textView.setText("connect fail");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("error2",e.toString());
+                    textView.setText("connect fail");
                 }
                 return null;
             }
