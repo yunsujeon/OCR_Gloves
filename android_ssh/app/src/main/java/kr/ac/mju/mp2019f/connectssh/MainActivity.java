@@ -33,17 +33,17 @@ import java.util.Properties;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
-    private String username = "spa152187";
-    private String host = "accs.mju.ac.kr";
-    private int port = 2018;
-    private String password = "rnrtk1203";
+//    private String username = "spa152187";
+//    private String host = "accs.mju.ac.kr";
+//    private int port = 2018;
+//    private String password = "rnrtk1203";
     private boolean flag = false;
-    private String command = "./python pytes.py";
+    private String command = "./wri";
 
-//    private String username = "jeon";
-//    private String host = "192.168.0.12";
-//    private int port = 22;
-//    private String password = "xornjseh12";
+    private String username = "jeon";
+    private String host = "211.169.221.73";
+    private int port = 22;
+    private String password = "xornjseh12";
 
     private Session session = null;
     private Channel channel = null;
@@ -134,8 +134,10 @@ public class MainActivity extends AppCompatActivity {
                 // Text 값 받아서 로그 남기기
                 host = et.getText().toString();
                 port = 22;
-                username = et2.getText().toString();
-                password = et3.getText().toString();
+                if(et2.getText().toString() != "")
+                    username = et2.getText().toString();
+                if(et3.getText().toString() != "")
+                    password = et3.getText().toString();
 
                 dialog.dismiss();     //닫기
                 // Event
