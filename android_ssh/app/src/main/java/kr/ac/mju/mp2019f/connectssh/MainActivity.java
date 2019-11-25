@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,6 +64,22 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.abs_layout);
+
+        SharedPreferences sf = getSharedPreferences("sFile",MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        host = sf.getString("host","192.168.43.226");
+        port = sf.getInt("port",22);
+//        username = sf.getString("username","jeon");
+//        password = sf.getString("password","xornjseh12");
+
+        username = "jeon";
+        password = "xornjseh12";
+
+        Log.d("A",host);
+        Log.d("A",""+port);
+        Log.d("A",username);
+        Log.d("A",password);
+
 
         button.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
@@ -134,10 +151,25 @@ public class MainActivity extends AppCompatActivity {
                 // Text 값 받아서 로그 남기기
                 host = et.getText().toString();
                 port = 22;
-                if(et2.getText().toString() != "")
-                    username = et2.getText().toString();
-                if(et3.getText().toString() != "")
-                    password = et3.getText().toString();
+//                if(et2.getText().toString() != "")
+//                    username = et2.getText().toString();
+//                if(et3.getText().toString() != "")
+//                    password = et3.getText().toString();
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE); //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("host",host); // key, value를 이용하여 저장하는 형태
+                editor.putInt("port",port);
+                editor.putString("username",username);
+                editor.putString("password",password);
+                editor.commit();
+
+
+                Log.d("A",host);
+                Log.d("A",""+port);
+                Log.d("A",username);
+                Log.d("A",password);
 
                 dialog.dismiss();     //닫기
                 // Event
