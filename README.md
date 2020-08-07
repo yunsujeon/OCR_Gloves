@@ -12,9 +12,10 @@ Tesseract is an open source text recognition (OCR) Engine, available under the A
 ### Knn
 [Knn](https://github.com/MicrocontrollersAndMore/OpenCV_3_KNN_Character_Recognition_Cpp)
 The k-nearest neighbors (KNN) algorithm is a simple, supervised machine learning algorithm that can be used to solve both classification and regression problems. It's easy to implement and understand, but has a major drawback of becoming significantly slows as the size of that data in use grows.  
-
-## SCB(Latte Panda)
-
+## SBC(Latte Panda)
+[LattePanda 4G/64G](http://www.lattepanda.com/products/3.html)
+To run knn / OCR , we use SBC
 ## MCU(arduino)
-
+[arduiono nano](https://store.arduino.cc/usa/arduino-nano)
+we use arduino nano to control 10 vibration motors.
 ## android(SSH)
